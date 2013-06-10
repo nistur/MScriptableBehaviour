@@ -76,9 +76,6 @@ void MScriptableBehaviour::update(void)
 {
     MEngine * engine = MEngine::getInstance();
     MGame * game = engine->getGame();
-    MSystemContext * system = engine->getSystemContext();
-    MScriptContext * script = engine->getScriptContext();
-    string fnName = m_Name;
 
 
     // check if the game is running, removing thif test will enable In-Editor update (like for the lookAt behavior)
@@ -88,19 +85,34 @@ void MScriptableBehaviour::update(void)
     if(!m_Init)
     {
         m_Init = true;
+        string strName = m_Name;
+        MSystemContext * system = engine->getSystemContext();
+        MScriptContext * script = engine->getScriptContext();
 
         char behaviourDir[256];
         getGlobalFilename(behaviourDir, system->getWorkingDirectory(), "behaviors");
 
 
         char behaviourFile[256];
-        getGlobalFilename(behaviourFile, behaviourDir, (fnName + ".lua").c_str());
+        getGlobalFilename(behaviourFile, behaviourDir, (strName + ".lua").c_str());
 
         script->addScript(behaviourFile);
-    }
 
-    fnName += ".update";
-    if(script->startCallFunction(fnName.c_str()))
+        callFunction("onBegin");
+    }
+    else
+        callFunction("update");
+}
+
+void MScriptableBehaviour::callFunction(const char* function)
+{
+    MEngine * engine = MEngine::getInstance();
+    MScriptContext * script = engine->getScriptContext();
+    string strName = m_Name;
+
+    strName += ".";
+    strName += function;
+    if(script->startCallFunction(strName.c_str()))
     {
         int bID = 0;
         for(int i = 0; i < getParentObject()->getBehaviorsNumber(); ++i)

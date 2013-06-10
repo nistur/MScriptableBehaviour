@@ -35,6 +35,8 @@ public:
     void runEvent(int param){}
 
 private:
+    void callFunction(const char* function);
+
     const char* m_Name;
 
     bool m_Init;
