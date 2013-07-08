@@ -7,5 +7,9 @@ Makefile
 *.dylib
 *.so
 *.dll
+*.a
+
+bin/
+obj/
 
 *.make

@@ -5,7 +5,7 @@
 
 vector<char*> s_BehaviourNames;
 
-void StartPlugin(void)
+void MPluginStart(MScriptableBehaviour)
 {
     // get engine
     MEngine * engine = MEngine::getInstance();
@@ -40,7 +40,7 @@ void StartPlugin(void)
     //behaviorManager->addBehavior(MyBehavior::getStaticName(), M_OBJECT3D, MyBehavior::getNew);
 }
 
-void EndPlugin(void)
+void MPluginEnd(MScriptableBehaviour)
 {
     for(vector<char*>::iterator iBehaviour = s_BehaviourNames.begin();
         iBehaviour != s_BehaviourNames.end();
