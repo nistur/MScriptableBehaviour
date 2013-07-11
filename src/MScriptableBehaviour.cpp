@@ -21,7 +21,9 @@ m_Init(false)
 
 // destructor
 MScriptableBehaviour::~MScriptableBehaviour(void)
-{}
+{
+    callFunction("onEnd");
+}
 
 // destroy function : always similar
 void MScriptableBehaviour::destroy(void)

@@ -11,5 +11,6 @@ Makefile
 
 bin/
 obj/
+scripts/*.c
 
 *.make

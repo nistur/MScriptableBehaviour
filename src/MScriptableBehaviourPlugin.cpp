@@ -3,6 +3,34 @@
 
 #include <cstring>
 
+#ifdef  M_USE_GAME_EVENT
+#ifdef  M_USE_SCRIPT_EXT
+#include "MScriptExt.h"
+#include "MScriptableBehaviourLua.c"
+#include "MEventListener.h"
+
+class MScriptableBehaviourEventListener : public MEventListener
+{
+public:
+    MEventListenerDeclare(MScriptableBehaviourEventListener);
+    void onEvent(const char* event)
+    {
+        if(strcmp(event, "MScriptInit") == 0)
+        {
+            MScriptExt* script = NULL;
+            MScriptExtGet(script);
+            if(script)
+                script->parse(scriptsMScriptableBehaviour, 
+                              scriptsMScriptableBehaviourName, 
+                              scriptsMScriptableBehaviourSize);
+        }
+    }
+};
+
+MScriptableBehaviourEventListener s_scriptableBehaviourScriptEventListener;
+#endif/*M_USE_SCRIPT_EXT*/
+#endif/*M_USE_GAME_EVENT*/
+
 vector<char*> s_BehaviourNames;
 
 void MPluginStart(MScriptableBehaviour)
