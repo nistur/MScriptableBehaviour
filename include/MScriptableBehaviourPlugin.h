@@ -12,6 +12,14 @@
 # define EXPORT
 #endif
 
+#ifdef  MPluginStart
+# undef MPluginStart
+#endif/*MPluginStart*/
+
+#ifdef  MPluginEnd
+# undef MPluginEnd
+#endif/*MPluginEnd*/
+
 #ifdef  M_SCRIPTABLE_BEHAVIOUR_STATIC
 
 #define MPluginStart(x) \
