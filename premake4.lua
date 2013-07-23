@@ -1,13 +1,7 @@
-dofile("bin2c.lua")
-dofile("os.lua")
+dofile("embed.lua")
 
-local _EMBED_DIR = _WORKING_DIR .. "/scripts/"
--- embed all lua files in the embed dir
-for i, filename in os.dir(_EMBED_DIR, "%.lua$") do
-    local file = io.open(_EMBED_DIR .. filename:gsub("%.lua$", "Lua%.c"), "w")
-    file:write(bin2c({path.getrelative(_WORKING_DIR, _EMBED_DIR .. filename)}))
-    file:close()
-end
+embed "scripts"
+embed "editor"
 
 solution "MScriptableBehaviour"
     configurations { "Debug", "Release" }
@@ -21,7 +15,7 @@ solution "MScriptableBehaviour"
               os.getenv("MSDKDIR") .. "/SDK/MEngine/Includes",
               os.getenv("MSDKDIR") .. "/SDK/MIngEd/Includes" ,
               os.getenv("MSDKDIR") .. "/Plugins/Includes",
-              "include", "scripts" }
+              "include", "scripts", "editor" }
 
     -- use MGameEvent if it exists
     if os.isfile(os.getenv("MSDKDIR") .. "Plugins/Includes/MGameEvent.h") then
@@ -30,6 +24,10 @@ solution "MScriptableBehaviour"
 
     if os.isfile(os.getenv("MSDKDIR") .. "Plugins/Includes/MScriptExt.h") then
         defines { "M_USE_SCRIPT_EXT" }
+    end
+
+    if os.isfile(os.getenv("MSDKDIR") .. "Plugins/Includes/MEmbedFile.h") then
+        defines { "M_USE_EMBED_FILE" }
     end
 
     -- OS defines

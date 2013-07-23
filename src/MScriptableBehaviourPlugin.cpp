@@ -3,6 +3,16 @@
 
 #include <cstring>
 
+#include "MScriptableBehaviorPublishEventsLua.c"
+
+#ifdef  M_USE_EMBED_FILE
+# include "MEmbedFile.h"
+#else
+# define EMBEDDED(dir, file)
+# define EMBED(dir, file)
+# define UNEMBED(dir, file)
+#endif/*M_USE_EMBED_FILE*/
+
 #ifdef  M_USE_GAME_EVENT
 #ifdef  M_USE_SCRIPT_EXT
 #include "MScriptExt.h"
@@ -20,9 +30,16 @@ public:
             MScriptExt* script = NULL;
             MScriptExtGet(script);
             if(script)
+            {
                 script->parse(scriptsMScriptableBehaviour, 
                               scriptsMScriptableBehaviourName, 
                               scriptsMScriptableBehaviourSize);
+#ifndef M_USE_EMBED_FILE
+                script->parse(editorMScriptableBehaviorPublishEvents,
+                              editorMScriptableBehaviorPublishEventsName,
+                              editorMScriptableBehaviorPublishEventsSize);
+#endif/*M_USE_EMBED_FILE*/
+            }
         }
     }
 };
@@ -33,8 +50,11 @@ MScriptableBehaviourEventListener s_scriptableBehaviourScriptEventListener;
 
 vector<char*> s_BehaviourNames;
 
+EMBEDDED(editor, MScriptableBehaviorPublishEvents);
+
 void MPluginStart(MScriptableBehaviour)
 {
+    EMBED(editor, MScriptableBehaviorPublishEvents);
     // get engine
     MEngine * engine = MEngine::getInstance();
     MSystemContext* system = engine->getSystemContext();
@@ -78,4 +98,5 @@ void MPluginEnd(MScriptableBehaviour)
     }
 
     s_BehaviourNames.clear();
+    UNEMBED(editor, MScriptableBehaviorPublishEvents);
 }

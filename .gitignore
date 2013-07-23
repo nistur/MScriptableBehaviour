@@ -12,5 +12,6 @@ Makefile
 bin/
 obj/
 scripts/*.c
+editor/*.c
 
 *.make
