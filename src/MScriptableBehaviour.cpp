@@ -15,7 +15,7 @@ m_Init(false)
 // copy constructor
 MScriptableBehaviour::MScriptableBehaviour(MScriptableBehaviour & behavior, MObject3d * parentObject):
 MBehavior(parentObject),
-m_Name("MScriptableBehaviour"),
+m_Name(behavior.m_Name),
 m_Init(false)
 {}
 
@@ -84,22 +84,10 @@ void MScriptableBehaviour::update(void)
     if(! game->isRunning())
         return;
 
+    // first update is onBegin
     if(!m_Init)
     {
         m_Init = true;
-        string strName = m_Name;
-        MSystemContext * system = engine->getSystemContext();
-        MScriptContext * script = engine->getScriptContext();
-
-        char behaviourDir[256];
-        getGlobalFilename(behaviourDir, system->getWorkingDirectory(), "behaviors");
-
-
-        char behaviourFile[256];
-        getGlobalFilename(behaviourFile, behaviourDir, (strName + ".lua").c_str());
-
-        script->addScript(behaviourFile);
-
         callFunction("onBegin");
     }
     else

@@ -33,7 +33,7 @@ function MScriptableBehavior(name)
    newclass.onBegin = function(object, behavior)
       local newvalue = {}
       for k,v in pairs(newclass.__members__) do
-         newvalue[k] = v
+         newvalue[k] = table.copy(v)
       end
       newvalue.__id = { object = object, behavior = behavior }
 
@@ -44,7 +44,7 @@ function MScriptableBehavior(name)
 
    newclass.update = function(object, behavior)
       obj = behavior_table[name][object]
-      if obj == nil then return end
+      if obj == nil then print("Unable to find behavior to update"); return end
 
       if obj.update then obj:update() end
    end
@@ -57,6 +57,16 @@ function MScriptableBehavior(name)
       behavior_table[name][object] = nil
    end
 
+   newclass.get = function(object)
+      return behavior_table[name][object]
+   end
+
    _G[name] = newclass
    return setmetatable(newclass, {__index = {}, __call = define})
+end
+
+--[[ load all behavior scripts ]]
+local behavior_scripts = readDirectory("behaviors")
+for i=1, #behavior_scripts do
+   dofile("behaviors/" .. behavior_scripts[i])
 end

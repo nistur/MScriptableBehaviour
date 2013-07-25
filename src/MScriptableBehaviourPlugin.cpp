@@ -85,7 +85,6 @@ void MPluginStart(MScriptableBehaviour)
                                           behaviourName );
         }
     }
-    //behaviorManager->addBehavior(MyBehavior::getStaticName(), M_OBJECT3D, MyBehavior::getNew);
 }
 
 void MPluginEnd(MScriptableBehaviour)
